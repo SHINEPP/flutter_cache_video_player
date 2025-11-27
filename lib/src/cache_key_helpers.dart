@@ -1,0 +1,15 @@
+/// The prefix used for all keys in this package.
+const packagePrefix = 'cache_video_player_';
+
+/// The prefix used for all cache keys in this package.
+const cacheKeyPrefix = '${packagePrefix}caching_time_of_';
+
+/// Generates a storage key for the given [dataSource].
+String getCacheKey(String dataSource) {
+  return '$cacheKeyPrefix${Uri.parse(dataSource)}';
+}
+
+/// Generates a storage key using the provided custom [cacheKey].
+String getCustomCacheKey(String cacheKey) {
+  return '$cacheKeyPrefix$cacheKey';
+}

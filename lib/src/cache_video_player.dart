@@ -5,8 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 
 import 'cache_key_helpers.dart';
+import 'cache_manager.dart';
+import 'config/config.dart';
 
 class CacheVideoPlayer {
+  static const _key = 'libCacheVideoPlayerData';
+  static final _defaultCacheManager = CacheManager(Config(_key));
+
   CacheVideoPlayer.networkUrl(
     Uri url, {
     this.formatHint,
@@ -18,11 +23,13 @@ class CacheVideoPlayer {
     this.invalidateCacheIfOlderThan = const Duration(days: 30),
     this.skipCache = false,
     String? cacheKey,
+    CacheManager? cacheManager,
   }) : dataSource = url.toString(),
        dataSourceType = DataSourceType.network,
        package = null,
        _authHeaders = downloadHeaders ?? httpHeaders,
-       _cacheKey = cacheKey != null ? getCustomCacheKey(cacheKey) : getCacheKey(url.toString());
+       _cacheKey = cacheKey != null ? getCustomCacheKey(cacheKey) : getCacheKey(url.toString()),
+       _cacheManager = cacheManager ?? _defaultCacheManager;
 
   /// The URI to the video file. This will be in different formats depending on
   /// the [DataSourceType] of the original video.
@@ -79,6 +86,14 @@ class CacheVideoPlayer {
   /// The cache key used for caching operations. This is used to uniquely
   /// identify the cached video file.
   final String _cacheKey;
+
+  /// The [CacheManager] instance used for caching video files.
+  ///
+  /// This is used to manage cached video files, including downloading,
+  /// retrieving, and removing cached files.
+  ///
+  /// Defaults to [VideoCacheManager] if not provided.
+  final CacheManager _cacheManager;
 
   /// The underlying video player controller that handles actual video playback.
   late final VideoPlayerController _videoPlayerController;

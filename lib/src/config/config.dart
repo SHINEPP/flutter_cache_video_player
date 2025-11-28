@@ -1,7 +1,10 @@
 import '../storage/file_system/file_system.dart';
 import '../storage/repositories/cache_info_repository.dart';
 import '../web/file_service.dart';
-import '_config_io.dart' as impl;
+import '_config_unsupported.dart'
+    if (dart.library.js_interop) '_config_web.dart'
+    if (dart.library.io) '_config_io.dart'
+    as impl;
 
 abstract class Config {
   /// Config file for the CacheManager.

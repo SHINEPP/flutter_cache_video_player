@@ -83,20 +83,6 @@ class CacheManager implements BaseCacheManager {
   /// Downloaded form [url], [headers] can be used for example for authentication.
   /// The files are returned as stream. First the cached file if available, when the
   /// cached file is too old the newly downloaded file is returned afterwards.
-  @override
-  @Deprecated('Prefer to use the new getFileStream method')
-  Stream<FileInfo> getFile(String url, {String? key, Map<String, String>? headers}) {
-    return getFileStream(
-      url,
-      key: key,
-      withProgress: false,
-    ).where((r) => r is FileInfo).cast<FileInfo>();
-  }
-
-  /// Get the file from the cache and/or online, depending on availability and age.
-  /// Downloaded form [url], [headers] can be used for example for authentication.
-  /// The files are returned as stream. First the cached file if available, when the
-  /// cached file is too old the newly downloaded file is returned afterwards.
   ///
   /// The [FileResponse] is either a [FileInfo] object for fully downloaded files
   /// or a [DownloadProgress] object for when a file is being downloaded.

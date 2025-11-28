@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_video_player/src/logger.dart';
+import 'package:flutter_cache_video_player/src/result/file_info.dart';
+import 'package:flutter_cache_video_player/src/utils/log.dart';
 import 'package:video_player/video_player.dart';
 
 import 'cache_key_helpers.dart';
@@ -145,9 +148,13 @@ class CacheVideoPlayer {
     if (_shouldUseCache) {
       realDataSource = dataSource;
 
-      _cacheManager.store.getFile("");
-
-
+      final responseStream = _cacheManager.getFileStream(dataSource, key: _cacheKey);
+      await for (final fileInfo in responseStream) {
+        if (fileInfo is FileInfo) {
+          Log.d("fileInfo = ${fileInfo.statusCode}");
+        }
+        Log.d("fileInfo = $fileInfo");
+      }
     } else {
       realDataSource = dataSource;
     }

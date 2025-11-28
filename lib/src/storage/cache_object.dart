@@ -10,6 +10,8 @@ class CacheObject {
   static const columnValidTill = 'validTill';
   static const columnTouched = 'touched';
   static const columnLength = 'length';
+  static const columnContentLength = "content_length";
+  static const columnComplete = "complete";
 
   CacheObject(
     this.url, {
@@ -19,7 +21,9 @@ class CacheObject {
     this.eTag,
     this.id,
     this.length,
+    this.contentLength,
     this.touched,
+    this.complete,
   }) : key = key ?? url;
 
   CacheObject.fromMap(Map<String, dynamic> map)
@@ -30,7 +34,9 @@ class CacheObject {
       validTill = DateTime.fromMillisecondsSinceEpoch(map[columnValidTill] as int),
       eTag = map[columnETag] as String?,
       length = map[columnLength] as int?,
-      touched = DateTime.fromMillisecondsSinceEpoch(map[columnTouched] as int);
+      contentLength = map[columnContentLength] as int?,
+      touched = DateTime.fromMillisecondsSinceEpoch(map[columnTouched] as int),
+      complete = map[columnComplete] as int?;
 
   /// Internal ID used to represent this cache object
   final int? id;
@@ -55,8 +61,14 @@ class CacheObject {
   /// The length of the cached file
   final int? length;
 
+  /// The content length of the Response
+  final int? contentLength;
+
   /// When the file is last used
   final DateTime? touched;
+
+  /// Weather the file is download complete
+  final int? complete;
 
   Map<String, dynamic> toMap({bool setTouchedToNow = true}) {
     final map = <String, dynamic>{
@@ -67,6 +79,8 @@ class CacheObject {
       columnValidTill: validTill.millisecondsSinceEpoch,
       columnTouched: (setTouchedToNow ? clock.now() : touched)?.millisecondsSinceEpoch ?? 0,
       columnLength: length,
+      columnContentLength: contentLength,
+      columnComplete: complete,
       if (id != null) columnId: id,
     };
     return map;
@@ -83,6 +97,8 @@ class CacheObject {
     DateTime? validTill,
     String? eTag,
     int? length,
+    int? contentLength,
+    int? complete,
   }) {
     return CacheObject(
       url ?? this.url,
@@ -92,6 +108,8 @@ class CacheObject {
       validTill: validTill ?? this.validTill,
       eTag: eTag ?? this.eTag,
       length: length ?? this.length,
+      contentLength: contentLength ?? this.contentLength,
+      complete: complete ?? this.complete,
       touched: touched,
     );
   }

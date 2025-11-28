@@ -133,7 +133,7 @@ class CacheVideoPlayer {
 
   Future<void> initialize() async {
     if (_hasDisposed) {
-      throw StateError('MultiVideoPlayer has Disposed.');
+      throw StateError('CacheVideoPlayer has Disposed.');
     }
     if (_hasInit) {
       return _initializedCompleter.future;
@@ -144,6 +144,10 @@ class CacheVideoPlayer {
     late String realDataSource;
     if (_shouldUseCache) {
       realDataSource = dataSource;
+
+      _cacheManager.store.getFile("");
+
+
     } else {
       realDataSource = dataSource;
     }
